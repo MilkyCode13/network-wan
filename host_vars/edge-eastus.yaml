@@ -1,0 +1,8 @@
+---
+vpn_tunnels:
+  - peer: edge-westus
+    address: 10.11.1.1
+    netmask: 255.255.255.252
+  - peer: edge-southcentralus
+    address: 10.11.2.1
+    netmask: 255.255.255.252

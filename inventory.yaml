@@ -1,0 +1,10 @@
+all:
+  children:
+    edge:
+      hosts:
+        edge-eastus:
+          ansible_host: 40.71.66.43
+        edge-westus:
+          ansible_host: 138.91.175.223
+        edge-southcentralus:
+          ansible_host: 70.37.49.129

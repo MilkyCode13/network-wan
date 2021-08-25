@@ -1,0 +1,26 @@
+router ospf 1
+  {% for interface in internal_interfaces %}passive-interface {{ interface }}
+  {% endfor %}
+crypto ikev2 keyring VPN
+ peer PEER
+  address 0.0.0.0 0.0.0.0
+  pre-shared-key P@ssw0rd
+crypto ikev2 profile VPN
+ keyring local VPN
+ authentication local pre-share
+ authentication remote pre-share
+ match address local 0.0.0.0
+ match identity remote address 0.0.0.0 0.0.0.0
+crypto ipsec profile VPN
+ set ikev2-profile VPN
+{% for tunnel in vpn_tunnels %}interface Tunnel{{ 100 + loop.index }}
+ tunnel mode ipsec ipv4
+ tunnel source {{ external_interface }}
+ tunnel destination {{ hostvars[tunnel.peer].ansible_host }}
+ ip address {{ tunnel.address }} {{ tunnel.netmask }}
+ tunnel protection ipsec profile VPN
+ ip ospf 1 area 0
+{% endfor %}
+{% for interface in internal_interfaces %}interface {{ interface }}
+  ip ospf 1 area 0
+{% endfor %}
